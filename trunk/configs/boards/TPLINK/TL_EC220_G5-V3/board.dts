@@ -1,0 +1,60 @@
+/dts-v1/;
+
+#include "mt7620a.dtsi"
+
+/ {
+    compatible = "tplink,ec220-g5-v3", "ralink,mt7620a-soc";
+    model = "TP-Link EC220-G5 v3";
+
+    palmbus@10000000 {
+        gsw@0 {
+            compatible = "ralink,mt7620a-gsw";
+            ralink,portmap = "wllll"; // 1 WAN + 4 LAN порта
+        };
+    };
+
+    ethernet@10100000 {
+        mtd-mac-address = <&factory 0x4>;
+        mediatek,portmap = "wllll"; // Должно совпадать с ralink,portmap выше!
+    };
+
+    gmac1@10120000 {
+        status = "okay";
+    };
+
+    leds {
+        compatible = "gpio-leds";
+
+        power {
+            label = "ec220-g5-v3:green:power";
+            gpios = <&gpio0 3 1>;
+        };
+
+        wan {
+            label = "ec220-g5-v3:green:wan";
+            gpios = <&gpio0 4 1>;
+        };
+
+        lan {
+            label = "ec220-g5-v3:green:lan";
+            gpios = <&gpio0 5 1>;
+        };
+    };
+
+    gpio-keys-polled {
+        compatible = "gpio-keys-polled";
+        poll-interval = <20>;
+
+        reset {
+            label = "reset";
+            gpios = <&gpio0 1 1>;
+            linux,code = <0x198>;
+        };
+
+        wps {
+            label = "wps";
+            gpios = <&gpio0 2 1>;
+            linux,code = <0x211>;
+        };
+    };
+};
